@@ -14,13 +14,14 @@ import AccountScreen from './screens/AccountScreen';
 import ParkingDetailScreen from './screens/ParkingDetailScreen';
 import Resumen from './screens/Resumen';
 import PaymentGatewayScreen from './screens/PaymentGatewayScreen';
-
+import Exito from './screens/Exito'; // Importar el componente Exito
 
 const Stack = createStackNavigator();
 
-export default function App() {
+const App = () => {
   const [initializing, setInitializing] = useState(true);
   const [user, setUser] = useState(null);
+  const [paymentSuccessful, setPaymentSuccessful] = useState(false); // Estado para controlar si el pago fue exitoso
 
   useEffect(() => {
     const auth = getAuth();
@@ -48,8 +49,9 @@ export default function App() {
             <Stack.Screen name="ParkingStatus" component={ParkingStatusScreen} options={{ title: 'Estado del Parking' }} /> 
             <Stack.Screen name="Account" component={AccountScreen} options={{ title: 'Cuenta de usuario' }} /> 
             <Stack.Screen name="ParkingDetail" component={ParkingDetailScreen} options={{ title: 'Detalles del estacionamiento' }} />
-          <Stack.Screen name="PaymentGateway" component={PaymentGatewayScreen} options={{ title: 'Método de pago' }} />
+            <Stack.Screen name="PaymentGateway" component={PaymentGatewayScreen} options={{ title: 'Método de pago' }} />
             <Stack.Screen name="Resumen" component={Resumen} options={{ title: 'Resumen de Reservación' }} />
+            <Stack.Screen name="Exito" component={Exito} options={{ title: 'exito' }} />
 
           </>
         ) : (
@@ -62,4 +64,6 @@ export default function App() {
       </Stack.Navigator>
     </NavigationContainer>
   );
-}
+};
+
+export default App;
