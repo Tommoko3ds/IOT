@@ -1,0 +1,22 @@
+{
+  "name": "nodejs-mqtt",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.19.2",
+    "force": "^0.0.3",
+    "jsonschema": "^1.2.6",
+    "mosca": "^2.8.3",
+    "mqtt": "^5.5.2",
+    "mysql": "^2.18.1",
+    "serialport": "^12.0.0",
+    "socket.io": "^4.7.5"
+  }
+}
