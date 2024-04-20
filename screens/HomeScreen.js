@@ -11,8 +11,11 @@ export default function HomeScreen({ navigation }) {
       />
       <Text style={styles.subTitle}>Dile adiós al estrés de buscar lugar en el estacionamiento.</Text>
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => navigation.navigate('Login')}>
-          <Text style={[styles.buttonText, styles.loginButtonText]}>Iniciar Sesión</Text>
+        <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => navigation.navigate('Login', )}>
+          <Text style={[styles.buttonText, styles.loginButtonText]}>Iniciar Sesión como Usuario</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={[styles.button, styles.loginButton]} onPress={() => navigation.navigate('Logadmin', )}>
+          <Text style={[styles.buttonText, styles.loginButtonText]}>Iniciar Sesión como Administrador</Text>
         </TouchableOpacity>
         <TouchableOpacity style={[styles.button, styles.signupButton]} onPress={() => navigation.navigate('Signup')}>
           <Text style={[styles.buttonText, styles.signupButtonText]}>Crear Cuenta</Text>
@@ -63,6 +66,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 10,
+    marginHorizontal: 10, 
+    paddingHorizontal: 10
   },
   buttonText: {
     fontSize: 16,
@@ -88,4 +93,3 @@ const styles = StyleSheet.create({
     fontFamily: 'Arial',
   },
 });
-

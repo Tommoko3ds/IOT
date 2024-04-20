@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Dimensions, Image } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; 
 import { Card } from 'react-native-elements';
-import Navbar from './navbar'; // Importa tu componente personalizado Navbar
-import Footer from './Footer'; // Importa tu componente personalizado Footer
-import { getAuth, signOut } from 'firebase/auth'; // Importa los métodos necesarios para autenticación
+import Navbar from './navbar'; 
+import Footer from './Footer'; 
+import { getAuth, signOut } from 'firebase/auth'; 
 
 const FindScreen = ({ navigation }) => {
   const windowWidth = Dimensions.get('window').width;
   const [userName, setUserName] = useState('');
 
   useEffect(() => {
-    // Obtener el nombre de usuario al cargar la pantalla
     const auth = getAuth();
     const user = auth.currentUser;
     if (user) {
@@ -34,9 +32,7 @@ const FindScreen = ({ navigation }) => {
       <Navbar userName={userName} navigation={navigation} />
       <View style={styles.content}>
         <View style={styles.header}>
-          <TouchableOpacity style={styles.button} onPress={() => { navigation.navigate('Find'); console.log('Botón presionado'); }}>
-            <Text style={styles.buttonText}>Buscar lugares cerca </Text>
-          </TouchableOpacity>
+          <Text style={styles.title}>Buscar lugares cerca</Text>
         </View>
         <View style={styles.cardContainer}>
           <TouchableOpacity onPress={() => navigation.navigate('ParkingDetail', { parkingType: 'Carro' })}>
@@ -65,19 +61,6 @@ const FindScreen = ({ navigation }) => {
               />
             </Card>
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => navigation.navigate('ParkingDetail', { parkingType: 'Camioneta' })}>
-            <Card
-              containerStyle={styles.card}
-              titleStyle={styles.cardTitle}
-            >
-              <Card.Title>Camioneta</Card.Title>
-              <Card.Divider/>
-              <Image
-                source={require('../img/camioneta.png')}
-                style={styles.image}
-              />
-            </Card>
-          </TouchableOpacity>
         </View>
         <Image
           source={require('../img/carro3.png')}
@@ -102,16 +85,11 @@ const styles = StyleSheet.create({
   },
   header: {
     alignItems: 'center',
+    marginBottom: 20,
   },
-  button: {
-    backgroundColor: '#EFBD28',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  buttonText: {
-    fontSize: 14,
-    color: '#000000',
+  title: {
+    fontSize: 25,
+    color: '#EFBD28',
     fontFamily: 'Arial',
     fontWeight: 'bold',
   },
@@ -122,7 +100,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   card: {
-    width: (Dimensions.get('window').width - 60) / 3,
+    width: (Dimensions.get('window').width - 60) / 2, // Modifica el ancho para que se ajuste a 2 cards
     borderRadius: 10,
     backgroundColor: '#f4cd28',
   },
@@ -137,10 +115,10 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
   imageBigcar: {
-    width: '80%',
-    height: '40%',
+    width: '100%',
+    height: '60%',
     resizeMode: 'contain',
-    marginBottom: 20,
+    marginBottom: 60,
   },
 });
 

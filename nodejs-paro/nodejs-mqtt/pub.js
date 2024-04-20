@@ -4,7 +4,7 @@ const { DelimiterParser } = require('@serialport/parser-delimiter');
 
 const puerto = new SerialPort(
     {
-        path: 'COM4',
+        path: '/dev/cu.usbmodem101',
         baudRate: 9600
     });
 

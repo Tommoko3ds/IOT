@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { Ionicons } from '@expo/vector-icons'; // Importar el componente Ionicons
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInicioSesion = async () => {
     if (!email || !contraseña) {
@@ -19,7 +19,19 @@ export default function LoginScreen({ navigation }) {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, contraseña);
       setError('');
-      navigation.navigate('Main');
+      // Aquí puedes verificar el tipo de usuario basado en un campo de roles en tu base de datos
+      // Por ahora, asumiré que tienes un campo "role" en la información del usuario
+      const user = auth.currentUser;
+      const userRole = user ? user.role : null;
+
+      if (userRole === 1) { // Administrador
+        navigation.navigate('AdminDashboard');
+      } else if (userRole === 0) { // Usuario normal
+        navigation.navigate('Main');
+      } else {
+        // Manejo para otros roles si es necesario
+        setError('Rol de usuario desconocido');
+      }
     } catch (error) {
       if (error.code === 'auth/wrong-password') {
         setError('Contraseña incorrecta. Por favor, inténtalo de nuevo.');
@@ -38,7 +50,7 @@ export default function LoginScreen({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="Correo electrónico"
-          placeholderTextColor="gray" // Color gris para el placeholder
+          placeholderTextColor="gray"
           onChangeText={text => setEmail(text)}
           value={email}
           autoCapitalize="none"
@@ -47,10 +59,10 @@ export default function LoginScreen({ navigation }) {
           <TextInput
             style={styles.passwordInput}
             placeholder="Contraseña"
-            placeholderTextColor="gray" // Color gris para el placeholder
+            placeholderTextColor="gray"
             onChangeText={text => setContraseña(text)}
             value={contraseña}
-            secureTextEntry={!showPassword} // Utiliza el estado showPassword para mostrar/ocultar la contraseña
+            secureTextEntry={!showPassword}
           />
           <TouchableOpacity style={styles.iconButton} onPress={() => setShowPassword(!showPassword)}>
             <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />

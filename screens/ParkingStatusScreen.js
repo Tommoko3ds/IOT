@@ -60,7 +60,7 @@ const ParkingStatusScreen = ({ navigation }) => {
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Tiempo transcurrido:</Text>
-          <Text style={styles.timeText}>{elapsedTime} minutos</Text>
+          <Text style={styles.timeText}>{elapsedTime} segundos</Text>
         </View>
         <View style={styles.infoContainer}>
           <Text style={styles.infoText}>Tarifa correspondiente:</Text>

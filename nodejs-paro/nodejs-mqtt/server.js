@@ -15,7 +15,7 @@ const mqttClient = mqtt.connect('mqtt://localhost:9000');
 const db = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "",
+  password: "root",
   database: "sm52_arduino"
 });
 
@@ -39,16 +39,20 @@ mqttClient.on('message', (topic, message) => {
       return;
     }
     console.log('Datos insertados en la base de datos');
+
+    // Emitir los datos a los clientes a través de WebSocket
+    io.emit('mqtt_message', { topic, message: message.toString() });
+
+    console.log('Cliente conectado');
+
+    socket.on('disconnect', () => {
+      console.log('Cliente desconectado');
+    });
   });
 
-  // Emitir los datos a los clientes a través de WebSocket
-  io.emit('mqtt_message', { topic, message: message.toString() });
-
-  console.log('Cliente conectado');
-
-  socket.on('disconnect', () => {
-    console.log('Cliente desconectado');
-  });
+  // Publicar mensaje MQTT indicando el estado del lugar de estacionamiento
+  const parkingSpotData = JSON.parse(message);
+  mqttClient.publish('parking_spot_status', JSON.stringify({ spotId: parkingSpotData.spotId, occupied: true }));
 });
 
 // Middleware para servir archivos estáticos
