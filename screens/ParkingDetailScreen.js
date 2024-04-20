@@ -3,7 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Modal, Animated } from
 
 // Importa las imágenes de los coches
 const carImages = [
-  require('../assets/car.png'),
+  require('../assets/images.png'),
   require('../assets/car2.png'),
   require('../assets/car.png'),
   require('../assets/car4.png'),
@@ -166,8 +166,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   carImage: {
-    width: '80%',
-    height: '80%',
+    width: '150%',
+    height: '150%',
     resizeMode: 'contain',
   },
   button: {

@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { Ionicons } from '@expo/vector-icons'; // Importar el componente Ionicons
+import { Ionicons } from '@expo/vector-icons';
 
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [contraseña, setContraseña] = useState('');
   const [error, setError] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // Estado para mostrar/ocultar la contraseña
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleInicioSesion = async () => {
     if (!email || !contraseña) {
@@ -15,10 +15,18 @@ export default function LoginScreen({ navigation }) {
       return;
     }
 
+    // Verificar si el correo electrónico es 'admin@gmail.com'
+    if (email === 'admin@gmail.com') {
+      setError('No se puede iniciar sesión con esta cuenta.');
+      return;
+    }
+
     try {
       const auth = getAuth();
       await signInWithEmailAndPassword(auth, email, contraseña);
       setError('');
+      
+      // Redireccionar a la pantalla 'Main' después del inicio de sesión exitoso
       navigation.navigate('Main');
     } catch (error) {
       if (error.code === 'auth/wrong-password') {
@@ -38,7 +46,7 @@ export default function LoginScreen({ navigation }) {
         <TextInput
           style={styles.input}
           placeholder="Correo electrónico"
-          placeholderTextColor="gray" // Color gris para el placeholder
+          placeholderTextColor="gray"
           onChangeText={text => setEmail(text)}
           value={email}
           autoCapitalize="none"
@@ -47,10 +55,10 @@ export default function LoginScreen({ navigation }) {
           <TextInput
             style={styles.passwordInput}
             placeholder="Contraseña"
-            placeholderTextColor="gray" // Color gris para el placeholder
+            placeholderTextColor="gray"
             onChangeText={text => setContraseña(text)}
             value={contraseña}
-            secureTextEntry={!showPassword} // Utiliza el estado showPassword para mostrar/ocultar la contraseña
+            secureTextEntry={!showPassword}
           />
           <TouchableOpacity style={styles.iconButton} onPress={() => setShowPassword(!showPassword)}>
             <Ionicons name={showPassword ? 'eye-off' : 'eye'} size={24} color="gray" />

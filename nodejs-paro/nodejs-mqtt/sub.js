@@ -5,7 +5,7 @@ const mysql = require('mysql');
 const db = mysql.createConnection({
     host: "localhost",
     user: "root",
-    password: "",
+    password: "root",
     database: "sm52_arduino"
 });
 
@@ -43,4 +43,3 @@ sub.on('message', (topic, message) => {
         console.log('Datos actualizados en la base de datos');
     });
 });
-

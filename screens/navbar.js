@@ -37,7 +37,7 @@ const Navbar = ({ userName, navigation }) => {
 
   return (
     <View style={styles.navbar}>
-      <Text style={styles.welcomeText}>Bienvenido a ParkPal, {userName}!</Text>
+      <Text style={styles.welcomeText}>Bienvenido a ParkPal, {userName ? userName : 'administrador'}!</Text>
       <TouchableOpacity onPress={() => setModalVisible(true)}>
         <Ionicons name="settings-outline" size={28} color="#3e3e3e" />
       </TouchableOpacity>

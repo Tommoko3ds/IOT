@@ -13,8 +13,8 @@ export default function Footer({ navigation }) {
         <Ionicons name="car-outline" size={28} color="#EFBD28" />
         <Text style={styles.footerText}>Parking</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => {}} style={styles.footerItem}>
-        <Ionicons name="time-outline" size={28} color="#EFBD28" />
+      <TouchableOpacity onPress={() => navigation.navigate('Nuevo')} style={styles.footerItem}>
+        <Ionicons name="car-outline" size={28} color="#EFBD28" />
         <Text style={styles.footerText}>Tickets</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={() => navigation.navigate('Account')} style={styles.footerItem}>
