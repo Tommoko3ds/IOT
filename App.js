@@ -17,7 +17,7 @@ import PaymentGatewayScreen from './screens/PaymentGatewayScreen';
 import Exito from './screens/Exito'; 
 import LoginAdminScreen from './screens/AdminDashboard';
 import LoginAdmin from './screens/LoginAdmin';
-
+import {AppRegistry} from 'react-native';
 const Stack = createStackNavigator();
 
 const App = () => {

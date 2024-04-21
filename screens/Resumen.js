@@ -51,7 +51,7 @@ const Resumen = () => {
               Área seleccionada:{" "}
             </Text>
             <Text style={[styles.areaText, { color: colors.text }]}>
-              Area VIP
+              A011
             </Text>
           </View>
           <View style={styles.totalContainer}>
