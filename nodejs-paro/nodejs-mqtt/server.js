@@ -54,7 +54,34 @@ mqttClient.on('message', (topic, message) => {
 // Middleware para servir archivos estáticos
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Ruta para obtener datos desde la base de datos
+// Ruta para obtener el recuento de los valores 0 y 1 en la columna "estado_sensor"
+// Ruta para obtener el recuento de los valores 0 y 1 en la columna "estado_sensor"
+app.get('/infrarrojos/count', (req, res) => {
+  const countQuery = 'SELECT estado_sensor, COUNT(*) AS count FROM infrarrojos GROUP BY estado_sensor';
+  
+  db.query(countQuery, (err, results) => {
+    if (err) {
+      console.error('Error al contar los valores en la tabla: ', err);
+      res.status(500).send('Error al contar los valores en la tabla');
+      return;
+    }
+
+    // Objeto para almacenar el recuento de los valores
+    const count = {
+      0: 0,
+      1: 0
+    };
+
+    // Recorre los resultados y suma los valores
+    results.forEach(row => {
+      count[row.estado_sensor] = row.count;
+    });
+
+    res.json(count); // Envía el objeto con el recuento de los valores como respuesta en formato JSON
+  });
+});
+
+
 app.get('/api/data', (req, res) => {
   const query = 'SELECT id_infrarrojo, estado_sensor FROM infrarrojos'; // Query para seleccionar todos los datos de la tabla 'arduino'
 

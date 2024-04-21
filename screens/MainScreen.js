@@ -1,87 +1,91 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, StyleSheet, Modal } from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { getAuth, signOut } from 'firebase/auth';
-import Footer from './Footer';
-import Navbar from './navbar';
+import { View, Text, FlatList, Button } from 'react-native';
+import axios from 'axios';
+import GetAddress from './components/getAdress';
+import { Dimensions } from 'react-native';
+import { BarChart } from 'react-native-chart-kit';
+import { LineChart } from 'react-native-chart-kit';
 
-export default function MainScreen({ navigation }) {
-  const [userName, setUserName] = useState('');
+import ChartComponent from './components/graphicBar';
+const MainScreen = () => {
+  const ipAddress = GetAddress();
+  const [data, setData] = useState(null);
+  const [count, setCount] = useState({ '0': 0, '1': 0 });
 
   useEffect(() => {
-    // Obtener el nombre de usuario al cargar la pantalla
-    const auth = getAuth();
-    const user = auth.currentUser;
-    if (user) {
-      setUserName(user.displayName);
-    }
+    const fetchData = async () => {
+      try {
+        // Obtiene los datos de los infrarrojos
+        const response = await axios.get(`http://192.168.0.182:3000/infrarrojos`);
+        setData(response.data);
+        
+        // Obtiene el total de ceros
+        const zeroCountResponse = await axios.get(`http://192.168.0.182:3000/infrarrojos/count`);
+        setCount(zeroCountResponse.data);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+    };
+
+    fetchData();
+    const intervalId = setInterval(fetchData, 1000);
+
+    return () => clearInterval(intervalId);
   }, []);
 
-  const handleLogout = async () => {
-    try {
-      const auth = getAuth();
-      await signOut(auth);
-      navigation.navigate('Home');
-    } catch (error) {
-      console.error('Error al cerrar sesión:', error.message);
-    }
-  };
-
-  return (
-    <View style={styles.container}>
-      <Navbar userName={userName} navigation={navigation} />
-
-      <View style={styles.content}>
-        <View style={styles.header}>
-          <Text style={styles.title}>Aparta tu lugar en Parkpal</Text>
-          <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('Find')}>
-            <Text style={styles.buttonText}>Buscar lugares cerca</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-
-      <Footer navigation={navigation} />
-     
+  const renderItem = ({ item }) => (
+    <View style={{ flexDirection: 'row', padding: 10 }}>
+      <Text style={{ flex: 1 }}>{item.id_infrarrojo}</Text>
+      <Text style={{ flex: 1 }}>{item.estado_sensor}</Text>
+      <Button
+        title="Guardar"
+        onPress={() => handleSave(item.id_infrarrojo)}
+      />
     </View>
   );
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF', // Cambio de color de fondo
-  },
-  content: {
-    flex: 1,
-    justifyContent: 'center',
-  },
-  header: {
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 24,
-    color: '#EFBD28',
-    marginBottom: 20,
-    fontFamily: 'Arial',
-    fontWeight: 'bold',
-  },
-  button: {
-    backgroundColor: '#f4cd28',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-  },
-  buttonText: {
-    fontSize: 16,
-    color: '#000000',
-    fontFamily: 'Arial',
-    fontWeight: 'bold',
-  },
-  centeredView: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 22,
-  },
-  
+  const handleSave = async (id) => {
+    try {
+      // Envía el estado 0 al servidor para el sensor con el ID especificado
+    await axios.put(`http://192.168.0.182:3000/infrarrojos/updateone`, {
+  id_infrarrojo: 11,
+  estado_sensor: 0, // Asegúrate de que este es el valor correcto
 });
+      // Actualiza los datos después de guardar
+      fetchData();
+    } catch (error) {
+      console.error('Error saving data:', error);
+    }
+  };
+const handleSendOne = async (id_infrarrojo) => {
+  try {
+    await axios.put(`http://192.168.0.182:3000/infrarrojos/updateone`, {
+      id_infrarrojo,
+      estado_sensor: 0
+    });
+    fetchData();
+  } catch (error) {
+    console.error('Error sending data:', error);
+  }
+};
+  return (
+    <View>
+      <Text>Ocupados: {count['0']}</Text>
+      <Text>Espacios Disponibles: {count['1']}</Text>
+   <Button
+  title="Guardar"
+  onPress={() => handleSendOne(item.id_infrarrojo)}
+/>
+      <FlatList
+        data={data}
+        renderItem={renderItem}
+        keyExtractor={item => item.id_infrarrojo.toString()}
+      />
+
+
+{count && <ChartComponent data={count} />}
+    </View>
+  );
+};
+
+export default MainScreen;
